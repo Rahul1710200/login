@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 
@@ -7,6 +8,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <ToastContainer />
       <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md border border-gray-200">
         <div className="flex">
           <button

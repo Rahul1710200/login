@@ -1,16 +1,33 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
     if (!name) newErrors.name = "Name is required";
     if (!email) newErrors.email = "Email is required";
-    if (!password) newErrors.password = "Password is required";
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/.test(
+        password
+      )
+    ) {
+      newErrors.password =
+        "Password must be at least 6 characters long, contain at least 1 special character, 1 number, and 1 letter.";
+    }
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -18,8 +35,8 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle signup logic here
       console.log("Signup successful");
+      toast.success("Signup successful!"); 
     }
   };
 
@@ -89,9 +106,30 @@ const Signup = () => {
         )}
       </div>
       <div>
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className={`w-full px-4 py-2 rounded-lg border ${
+            errors.confirmPassword ? "border-red-500" : "border-gray-300"
+          } focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all`}
+          placeholder="Confirm your password"
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+        )}
+      </div>
+      <div>
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-colors duration-300"
+          className="w-full bg-black  py-2 px-4 rounded-lg hover:bg-gray-900 text-white active:scale-95  transition-transform  duration-100"
         >
           Signup
         </button>

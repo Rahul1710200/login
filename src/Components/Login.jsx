@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,8 +11,17 @@ const Login = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
-    if (!password && !isForgotPassword)
+    if (!password && !isForgotPassword) {
       newErrors.password = "Password is required";
+    } else if (
+      password &&
+      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/.test(
+        password
+      )
+    ) {
+      newErrors.password =
+        "Password must be at least 6 characters long, contain at least 1 special character, 1 number, and 1 letter.";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -20,8 +31,10 @@ const Login = () => {
     if (validateForm()) {
       if (isForgotPassword) {
         console.log("Forgot password email sent to:", email);
+        toast.info("Forgot password email sent!"); 
       } else {
         console.log("Login successful");
+        toast.success("Login successful!"); 
       }
     }
   };
@@ -75,7 +88,7 @@ const Login = () => {
       <div>
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-colors duration-300"
+          className="w-full bg-black text-white active:scale-95  transition-transform  py-2 px-4 rounded-lg hover:bg-gray-900  duration-100"
         >
           {isForgotPassword ? "Reset Password" : "Login"}
         </button>
@@ -106,7 +119,6 @@ const Login = () => {
           />
           Login with Google
         </button>
-       
       </div>
     </form>
   );
